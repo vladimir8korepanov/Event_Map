@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import events from '@/../public/mock/events.json';
+import eventsData from '@/../public/mock/events.json';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
@@ -7,11 +9,11 @@ export async function GET(request: Request) {
     const query = searchParams.get('query')?.toLowerCase() || '';
     
     const filteredEvents = query 
-      ? events.filter(event => 
+      ? eventsData.filter(event => 
           event.title.toLowerCase().includes(query) ||
           event.description.toLowerCase().includes(query)
         )
-      : events;
+      : eventsData;
 
     return new NextResponse(JSON.stringify(filteredEvents), {
       status: 200,
@@ -24,7 +26,8 @@ export async function GET(request: Request) {
     return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     });
   }
